@@ -15,8 +15,8 @@ spec:
     name: logger
     resources: {}
     volumeMounts:
-        - mountPath: "/var/www/nginx"
-          name: log-volume
+    - mountPath: "/var/www/nginx"
+      name: log-volume
   dnsPolicy: ClusterFirst
   restartPolicy: Always
 status: {}
