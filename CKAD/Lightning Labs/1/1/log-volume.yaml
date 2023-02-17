@@ -3,10 +3,10 @@ kind: PersistentVolume
 metadata:
   name: log-volume
 spec:
-  storageClassName: manual
   capacity:
     storage: 1Gi
   accessModes:
-    - ReadWriteMany
+  - ReadWriteMany
+  storageClassName: manual
   hostPath:
-    path: "/opt/volume/nginx"
+    path: /opt/volume/nginx
