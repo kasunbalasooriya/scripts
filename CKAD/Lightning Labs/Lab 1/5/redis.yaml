@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: redis
+  name: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: redis
+    spec:
+
+      volumes:
+      - name: redis-config
+        configMap:
+          name: redis-config
+      - name: data
+        emptyDir: {}
+
+      containers:
+      - image: redis:alpine
+        name: redis
+        ports:
+        - containerPort: 6379
+
+        volumeMounts:
+        - name: redis-config
+          mountPath: /redis-master
+        - name: data
+          mountPath: /redis-master-data
+        resources:
+          requests:
+            cpu: "0.2"
+status: {}

@@ -10,7 +10,8 @@ metadata:
 spec:
   containers:
   - image: busybox
-    command: ["while true; do date; sleep $TIME_FREQ;done>/opt/time/time-check.log"]
+    command: ["/bin/sh"]
+    args: ["-c","while true; do date; sleep $TIME_FREQ;done>/opt/time/time-check.log"]
     env:
         - name: TIME_FREQ
           valueFrom:
@@ -21,54 +22,15 @@ spec:
     imagePullPolicy: Always
     name: time-check
     resources: {}
-    terminationMessagePath: /dev/termination-log
-    terminationMessagePolicy: File
+
     volumeMounts:
     - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
       name: kube-api-access-s6kl4
       readOnly: true
-  dnsPolicy: ClusterFirst
-  enableServiceLinks: true
-  preemptionPolicy: PreemptLowerPriority
-  priority: 0
-  restartPolicy: Always
-  schedulerName: default-scheduler
-  securityContext: {}
-  serviceAccount: default
-  serviceAccountName: default
-  terminationGracePeriodSeconds: 30
-  tolerations:
-  - effect: NoExecute
-    key: node.kubernetes.io/not-ready
-    operator: Exists
-    tolerationSeconds: 300
-  - effect: NoExecute
-    key: node.kubernetes.io/unreachable
-    operator: Exists
-    tolerationSeconds: 300
+
   volumes:
   - name: mydir
     hostPath:
       path: /opt/time
       type: DirectoryOrCreate
-  - name: kube-api-access-s6kl4
-    projected:
-      defaultMode: 420
-      sources:
-      - serviceAccountToken:
-          expirationSeconds: 3607
-          path: token
-      - configMap:
-          items:
-          - key: ca.crt
-            path: ca.crt
-          name: kube-root-ca.crt
-      - downwardAPI:
-          items:
-          - fieldRef:
-              apiVersion: v1
-              fieldPath: metadata.namespace
-            path: namespace
-status:
-  phase: Pending
-  qosClass: BestEffort
+  
